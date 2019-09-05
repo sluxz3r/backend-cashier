@@ -15,6 +15,30 @@ module.exports = {
         })
     },
 
+    getTrans:() => {
+        return new Promise((resolve, reject) => {
+            conn.query(`SELECT * FROM transaksi`, (err, result) => {
+                if (!err) {
+                    resolve(result)
+                } else {
+                    reject(new Error(err))
+                }
+            })
+        })
+    },
+
+    getIdProd:()=>{
+        return new Promise((resolve, reject) => {
+            conn.query(`SELECT idProd FROM transaksi`, (err, result) => {
+                if (!err) {
+                    resolve(result)
+                } else {
+                    reject(new Error(err))
+                }
+            })
+        })
+    },
+
     //Add Product
     AddProduct : (data) => {
         return new Promise((resolve, reject) => {
@@ -69,6 +93,18 @@ module.exports = {
         const test = 'test';
         return new Promise((resolve, reject) => {
             conn.query(`UPDATE user SET token = ? WHERE userid =?`, [test, userid], (err, result) => {
+                if (!err) {
+                    resolve(result)
+                } else {
+                    reject(new Error(err))
+                }
+            })
+        })
+    },
+
+    Transaksi: (data) => {
+        return new Promise((resolve, reject) => {
+            conn.query('INSERT INTO transaksi SET ?', data, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
