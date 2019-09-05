@@ -6,11 +6,8 @@ const Auth = require('../helpers/auth')
 const multer = require('multer');
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './src/uploads/images/')
-  },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+      cb(null, file.originalname);
   }
 })
 let upload = multer({ storage: storage, limits: { fileSize: 100000000 } })
