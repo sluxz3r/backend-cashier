@@ -12,6 +12,14 @@ module.exports = {
     return res.status(resultPrint.status_code).json(resultPrint)
   },
 
+  res_error: (res, status, error) => {
+    let resultPrint = {}
+    resultPrint.status_code = status || 401
+    resultPrint.error = error || 'Email Sudah Terdaftar'
+
+    return res.status(resultPrint.status_code).json(resultPrint)
+  },
+
   generateSalt: (length) => {
     return crypto.randomBytes(Math.ceil(length / 2)).toString('hex').slice(0, length)
   },

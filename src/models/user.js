@@ -3,9 +3,10 @@ const jwt = require('jsonwebtoken')
 
 module.exports = {
     //Get All Product
-    GetAll: () => {
+    GetAll: (product, order) => {
+        const likeProduct = '%' + product + '%'
         return new Promise((resolve, reject) => {
-            conn.query(`SELECT * FROM product`, (err, result) => {
+            conn.query(`SELECT product.id_product, product.name, product.price, product.image, product.created_at, categori.cat_name FROM product INNER JOIN categori ON product.category=categori.id_cat WHERE product.name LIKE ? ORDER BY product.price ${order}`, likeProduct, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {

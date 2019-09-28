@@ -6,7 +6,9 @@ const sgMail = require('@sendgrid/mail');
 
 module.exports = {
   GetAll: (req, res) => {
-    userModels.GetAll()
+    const product = req.query.product || ''
+    const order = req.query.order || 'Asc'
+    userModels.GetAll(product, order)
       .then((resultRegister) => {
         CashierHelper.response(res, resultRegister, 200)
       })
@@ -85,11 +87,14 @@ module.exports = {
     }
 
     userModels.Register(data)
-      .then((resultRegister) => {
-        CashierHelper.response(res, resultRegister, 200)
+      .then((result) => {
+        CashierHelper.response(res, data, 200)
+        console.log(result);
+        
       })
       .catch((error) => {
-        console.log(error)
+        CashierHelper.res_error(res, 401, 'Email Sudah Terdaftar')   
+        console.log(error);
       })
   },
 
@@ -100,6 +105,7 @@ module.exports = {
 
     userModels.getByEmail(email)
       .then((result) => {
+        if(result.length > 0){
         const dataUser = result[0]
         const usePassword = CashierHelper.setPassword(password, dataUser.salt).passwordHash
 
@@ -120,10 +126,12 @@ module.exports = {
 
           return CashierHelper.response(res, dataUser, 200)
         } else {
-          return CashierHelper.response(res, null, 403, 'Wrong password!')
+          return CashierHelper.response(res,null, 401, 'Wrong Password!!!')
         }
 
-      })
+      }else{
+        return CashierHelper.response(res,null, 401, 'Email Tidak Terdaftar')
+      }})
       .catch((error) => {
         console.log(error)
       })
